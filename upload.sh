@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+TMP_FOLDER=/tmp
 DEST_FOLDER=/tmp/osc_project
 OSCRC_FILE=${OSCRC_FILE:=/root/.config/osc/oscrc}
 FOLDER=${FOLDER:=.}
@@ -26,11 +27,11 @@ echo "Package name: $PACKAGE"
 
 # Create tar file and copy to obs folder
 echo "Creating tar file..."
-mkdir /tmp/$PACKAGE
-cp -R $FOLDER/* /tmp/$PACKAGE
-tar -zcvf /tmp/$PACKAGE.tar.gz --exclude='.git' /tmp/$PACKAGE
-cp /tmp/$PACKAGE.tar.gz $DEST_FOLDER
-echo "tar file created: /tmp/$PACKAGE.tar.gz"
+mkdir $TMP_FOLDER/$PACKAGE
+cp -R $FOLDER/* $TMP_FOLDER/$PACKAGE
+tar -zcvf $TMP_FOLDER/$PACKAGE.tar.gz --exclude='.git' -C $TMP_FOLDER $PACKAGE
+cp $TMP_FOLDER/$PACKAGE.tar.gz $DEST_FOLDER
+echo "tar file created: $TMP_FOLDER/$PACKAGE.tar.gz"
 
 # Copy .spec file from git project if exists
 if [ -e $FOLDER/$PACKAGE_NAME.spec ]; then
