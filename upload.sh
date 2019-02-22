@@ -17,7 +17,9 @@ sed -i "s/# user =/user = $OBS_USER/g" $OSCRC_FILE
 sed -i "s/# pass =/pass = $OBS_PASS/g" $OSCRC_FILE
 
 clean
-tar -zcvf /tmp/$PACKAGE.tar.gz --exclude='.git' $FOLDER/
+mkdir /tmp/$PACKAGE
+cp -R $FOLDER/* /tmp/$PACKAGE
+tar -zcvf /tmp/$PACKAGE.tar.gz --exclude='.git' /tmp/$PACKAGE
 osc checkout $OBS_PROJECT -o $DEST_FOLDER
 cp /tmp/$PACKAGE.tar.gz $DEST_FOLDER
 cp $FOLDER/$PACKAGE_NAME.spec $DEST_FOLDER
