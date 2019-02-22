@@ -1,0 +1,7 @@
+services:
+  - docker
+
+script:
+  - docker build -t xarbulu/continuous_delivery .
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - docker push xarbulu/continuous_delivery 
