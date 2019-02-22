@@ -1,37 +1,59 @@
 #!/bin/sh
 set -e
 
-function clean(){
-  rm -rf /tmp/$OBS_PROJECT
-  rm -rf /tmp/$PACKAGE.tar.gz
-}
-
 DEST_FOLDER=/tmp/osc_project
 OSCRC_FILE=${OSCRC_FILE:=/root/.config/osc/oscrc}
 FOLDER=${FOLDER:=.}
-PACKAGE=$PACKAGE_NAME-`cat $FOLDER/${VERSION_FILE:=VERSION}`
 OBS_PROJECT=$OBS_PROJECT/$PACKAGE_NAME
 TARGET_PROJECT=${TARGET_PROJECT:=false}
 
 sed -i "s/# user =/user = $OBS_USER/g" $OSCRC_FILE
 sed -i "s/# pass =/pass = $OBS_PASS/g" $OSCRC_FILE
 
-clean
+# Checkout obs package
+echo "Downloading $OBS_PROJECT ..."
+osc checkout $OBS_PROJECT -o $DEST_FOLDER
+
+if [ -e *.spec ]; then
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' *.spec)
+  echo "Version found in local spec file: $VERSION"
+else
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/*.spec)
+  echo "Version found in obs project spec file: $VERSION"
+fi
+PACKAGE=$PACKAGE_NAME-$VERSION
+echo "Package name: $PACKAGE"
+
+# Create tar file and copy to obs folder
+echo "Creating tar file..."
 mkdir /tmp/$PACKAGE
 cp -R $FOLDER/* /tmp/$PACKAGE
 tar -zcvf /tmp/$PACKAGE.tar.gz --exclude='.git' /tmp/$PACKAGE
-osc checkout $OBS_PROJECT -o $DEST_FOLDER
 cp /tmp/$PACKAGE.tar.gz $DEST_FOLDER
-cp $FOLDER/$PACKAGE_NAME.spec $DEST_FOLDER
-cp $FOLDER/$PACKAGE_NAME.changes $DEST_FOLDER
+echo "tar file created: /tmp/$PACKAGE.tar.gz"
 
+# Copy .spec file from git project if exists
+if [ -e $FOLDER/$PACKAGE_NAME.spec ]; then
+  echo "Spec file found"
+  cp $FOLDER/$PACKAGE_NAME.spec $DEST_FOLDER
+fi
+
+# Copy .changes file from git project if exists
+if [ -e $FOLDER/$PACKAGE_NAME.changes ]; then
+  echo "Changes file found"
+  cp $FOLDER/$PACKAGE_NAME.changes $DEST_FOLDER
+fi
+
+# Update project
 cd $DEST_FOLDER
 #osc build
 osc add *
 osc commit -m "New development version of $PACKAGE released"
 
 if [ "$TARGET_PROJECT" != false ]; then
+  echo "Submit request created to $TARGET_PROJECT"
   osc sr $OBS_PROJECT $TARGET_PROJECT
 fi
 
 rm $OSCRC_FILE
+echo "Package correctly updated!"

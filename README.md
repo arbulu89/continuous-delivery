@@ -7,11 +7,19 @@ It uses a predefined oscrc file which has to be hacked by environment variables
 to update the user and password to give upload right to osc (OBS command line
 tool).
 
-## How to use
+## Disclaimer
 
-This example will be based in [travis ci](https://travis-ci.org/) but it could
-be extrapolated quite easily to any other CI tool (jenkins, gitlab, etc) or even
-locally.
+In order to use this delivery process some conditions are required:
+
+1. OBS project and package must already exist. The process won't create a package.
+2. .spec and .changes file should be added to the git project. Otherwise current
+.spec and .changes from the OBS package will be used, but this is not recommended
+if you want a real CD pipeline.
+3. Build process is not currently executed, so make sure the project builds
+locally (this feature might be added in the future).
+4. Package version will be obtained from "Version: " in the .spec file.
+
+## How to use
 
 These steps must be followed to run the delivery operation:
 
@@ -29,12 +37,12 @@ export OBS_USER=my-user # my obs user name
 export OBS_PASS=my-pass # my obs user password
 export OBS_PROJECT=my-project # obs project
 export PACKAGE_NAME=my-package # package name in obs project
-export FOLDER=/package # used folder inside the docker container where our code is located
 ```
 
 Here other optional parameters:
 
 ```bash
+export FOLDER=/package # used folder inside the docker container where our code is located
 export TARGET_PROJECT=target-project # target project to create a submit request
 ```
 
