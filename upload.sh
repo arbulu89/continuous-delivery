@@ -27,11 +27,13 @@ echo "Package name: $PACKAGE"
 
 # Create tar file and copy to obs folder
 echo "Creating tar file..."
-mkdir $TMP_FOLDER/$PACKAGE
-cp -R $FOLDER/* $TMP_FOLDER/$PACKAGE
-tar -zcvf $TMP_FOLDER/$PACKAGE.tar.gz --exclude='.git' -C $TMP_FOLDER $PACKAGE
-cp $TMP_FOLDER/$PACKAGE.tar.gz $DEST_FOLDER
-echo "tar file created: $TMP_FOLDER/$PACKAGE.tar.gz"
+TAR_NAME=${TAR_NAME:=$PACKAGE_NAME}
+TAR_NAME=$TAR_NAME-$VERSION
+mkdir $TMP_FOLDER/$TAR_NAME
+cp -R $FOLDER/* $TMP_FOLDER/$TAR_NAME
+tar -zcvf $TMP_FOLDER/$TAR_NAME.tar.gz --exclude='.git' -C $TMP_FOLDER $TAR_NAME
+cp $TMP_FOLDER/$TAR_NAME.tar.gz $DEST_FOLDER
+echo "tar file created: $TMP_FOLDER/$TAR_NAME.tar.gz"
 
 # Copy .spec file from git project if exists
 if [ -e $FOLDER/$PACKAGE_NAME.spec ]; then
