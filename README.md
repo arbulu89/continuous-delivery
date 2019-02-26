@@ -26,7 +26,7 @@ These steps must be followed to run the delivery operation:
 1. Pull the docker image. The image is currently stored in: https://cloud.docker.com/u/shap/repository/docker/shap/continuous_deliver
 
 ```bash
-docker pull shap/continuous_delivery:latest
+docker pull shap/continuous_deliver:latest
 ```
 
 2. Set the environment variables. This is not mandatory but it will facilitate
@@ -50,7 +50,7 @@ export TAR_NAME=my-tar # Custom tar name. Otherwise package name will be used
 3. Run the docker container
 
 ```bash
-docker run -t -v "$(pwd):/package" -e OBS_USER=$OBS_USER -e OBS_PASS=$OBS_PASS -e OBS_PROJECT=$OBS_PROJECT -e PACKAGE_NAME=$PACKAGE_NAME shap/continuous_delivery /bin/bash -c "cd /package;/upload.sh"
+docker run -t -v "$(pwd):/package" -e OBS_USER=$OBS_USER -e OBS_PASS=$OBS_PASS -e OBS_PROJECT=$OBS_PROJECT -e PACKAGE_NAME=$PACKAGE_NAME shap/continuous_deliver /bin/bash -c "cd /package;/upload.sh"
 ```
 
 *FOLDER* variable must match with the path used in the volume creation and last
