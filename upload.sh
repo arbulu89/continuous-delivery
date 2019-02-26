@@ -26,8 +26,8 @@ PACKAGE=$PACKAGE_NAME-$VERSION
 echo "Package name: $PACKAGE"
 
 # Create tar file and copy to obs folder
-echo "Creating tar file..."
 TAR_NAME=${TAR_NAME:=$PACKAGE_NAME}
+echo "Creating tar file: $TAR_NAME..."
 TAR_NAME=$TAR_NAME-$VERSION
 mkdir $TMP_FOLDER/$TAR_NAME
 cp -R $FOLDER/* $TMP_FOLDER/$TAR_NAME
