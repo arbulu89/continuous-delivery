@@ -15,7 +15,7 @@ jobs:
           - PACKAGE_NAME=my-package
 
       before_install:
-        - docker pull xarbulu/continuous_delivery:latest
+        - docker pull shap/continuous_delivery:latest
 
       script:
         - |
@@ -25,5 +25,5 @@ jobs:
           -e FOLDER=$FOLDER \
           -e OBS_PROJECT=$OBS_PROJECT \
           -e PACKAGE_NAME=$PACKAGE_NAME \
-          xarbulu/continuous_delivery \
+          shap/continuous_delivery \
           /bin/bash -c "cd /package;/upload.sh"
