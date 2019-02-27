@@ -1,19 +1,44 @@
 #!/bin/sh
 set -e
+source $(dirname $0)/utils.sh
 
 TMP_FOLDER=/tmp
 DEST_FOLDER=/tmp/osc_project
 OSCRC_FILE=${OSCRC_FILE:=/root/.config/osc/oscrc}
 FOLDER=${FOLDER:=.}
-OBS_PROJECT=$OBS_PROJECT/$PACKAGE_NAME
-TARGET_PROJECT=${TARGET_PROJECT:=false}
 
-sed -i "s/# user =/user = $OBS_USER/g" $OSCRC_FILE
-sed -i "s/# pass =/pass = $OBS_PASS/g" $OSCRC_FILE
+# Mandatory parameters set using env varialbes
+# OBS_USER, OBS user
+# OBS_PASS, OBS user password
+# OBS_PROJECT, OBS project where the package is stored
+# PACKAGE_NAME, PACKAGE to submit in OBS project
+
+function check_params {
+  if [ -z $OBS_PROJECT -o -z $PACKAGE_NAME ]; then
+    echo "OBS_PROJECT or PACKAGE_NAME not set..."
+    return 1
+  else
+    return 0
+  fi
+}
+
+check_user
+if [ $? -ne 0 ]; then
+  rm $OSCRC_FILE
+  exit 1
+fi
+
+check_params
+if [ $? -ne 0 ]; then
+  rm $OSCRC_FILE
+  exit 1
+fi
+
+OBS_PACKAGE=$OBS_PROJECT/$PACKAGE_NAME
 
 # Checkout obs package
-echo "Downloading $OBS_PROJECT ..."
-osc checkout $OBS_PROJECT -o $DEST_FOLDER
+echo "Downloading $OBS_PACKAGE ..."
+osc checkout $OBS_PACKAGE -o $DEST_FOLDER
 
 if [ -e *.spec ]; then
   VERSION=$(grep -Po '^Version:\s*\K(.*)' *.spec)
@@ -22,6 +47,7 @@ else
   VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/*.spec)
   echo "Version found in obs project spec file: $VERSION"
 fi
+
 PACKAGE=$PACKAGE_NAME-$VERSION
 echo "Package name: $PACKAGE"
 
@@ -52,11 +78,6 @@ cd $DEST_FOLDER
 #osc build
 osc add *
 osc commit -m "New development version of $PACKAGE released"
-
-if [ "$TARGET_PROJECT" != false ]; then
-  echo "Submit request created to $TARGET_PROJECT"
-  osc sr $OBS_PROJECT $TARGET_PROJECT
-fi
 
 rm $OSCRC_FILE
 echo "Package correctly updated!"
