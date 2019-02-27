@@ -50,7 +50,8 @@ export TAR_NAME=my-tar # Custom tar name. Otherwise package name will be used
 3. Run the docker container
 
 ```bash
-docker run -t -v "$(pwd):/package" -e OBS_USER=$OBS_USER -e OBS_PASS=$OBS_PASS -e OBS_PROJECT=$OBS_PROJECT -e PACKAGE_NAME=$PACKAGE_NAME shap/continuous_deliver /bin/bash -c "cd /package;/upload.sh"
+docker run -t -v "$(pwd):/package" -e OBS_USER=$OBS_USER -e OBS_PASS=$OBS_PASS -e OBS_PROJECT=$OBS_PROJECT -e PACKAGE_NAME=$PACKAGE_NAME shap/continuous_deliver /bin/bash -c "cd /package;/scripts/upload.sh"
+docker run -t -v "$(pwd):/package" -e OBS_USER=$OBS_USER -e OBS_PASS=$OBS_PASS -e OBS_PROJECT=$OBS_PROJECT -e PACKAGE_NAME=$PACKAGE_NAME shap/continuous_deliver /bin/bash -c "cd /package;/scripts/submit.sh"
 ```
 
 *FOLDER* variable must match with the path used in the volume creation and last
