@@ -9,16 +9,21 @@ OSCRC_FILE=${OSCRC_FILE:=/root/.config/osc/oscrc}
 # OBS_PASS, OBS user password
 # OBS_PROJECT, OBS project where the package is stored
 # PACKAGE_NAME, PACKAGE to submit in OBS project
-# TARGET_PROJECT, target project to submit
+# TARGET_PROJECT, target project to submit. If not set the job is skipped
 
 function check_params {
-  if [ -z $OBS_PROJECT -o -z $PACKAGE_NAME -o -z $TARGET_PROJECT ]; then
+  if [ -z $OBS_PROJECT -o -z $PACKAGE_NAME ]; then
     echo "OBS_PROJECT, PACKAGE_NAME or TARGET_PROJECT not set..."
     return 1
   else
     return 0
   fi
 }
+
+if [ -z $TARGET_PROJECT ]; then
+  echo "TARGET_PROJECT not set. Skipping package submission."
+  exit 0
+fi
 
 check_user
 if [ $? -ne 0 ]; then

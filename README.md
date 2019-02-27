@@ -43,7 +43,7 @@ Here other optional parameters:
 
 ```bash
 export FOLDER=/package # used folder inside the docker container where our code is located
-export TARGET_PROJECT=target-project # target project to create a submit request
+export TARGET_PROJECT=target-project # target project to create a submit request. If not set submission will b skipped
 export TAR_NAME=my-tar # Custom tar name. Otherwise package name will be used
 ```
 
