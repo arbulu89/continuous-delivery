@@ -13,7 +13,7 @@ OSCRC_FILE=${OSCRC_FILE:=/root/.config/osc/oscrc}
 
 function check_params {
   if [ -z $OBS_PROJECT -o -z $PACKAGE_NAME ]; then
-    echo "OBS_PROJECT, PACKAGE_NAME or TARGET_PROJECT not set..."
+    echo "OBS_PROJECT or PACKAGE_NAME not set..."
     return 1
   else
     return 0
@@ -39,7 +39,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Creating submit request to $TARGET_PROJECT from $OBS_PROJECT/$PACKAGE_NAME"
-osc sr -m "New development version of $PACKAGE_NAME released" $OBS_PROJECT $PACKAGE_NAME $TARGET_PROJECT
+osc sr -m "New development version of $PACKAGE_NAME released" --yes $OBS_PROJECT $PACKAGE_NAME $TARGET_PROJECT
 
 rm $OSCRC_FILE
 echo "Package correctly submitted!"
