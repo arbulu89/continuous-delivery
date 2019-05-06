@@ -13,12 +13,13 @@ In order to use this delivery process some conditions are required:
 
 1. OBS project and package must already exist. The process won't create a package.
 2. _.spec_ and _.changes_ file should be added to the git project or a 
-[OBS _service file](https://en.opensuse.org/openSUSE:Build_Service_Concept_SourceService) should be used. Otherwise current
-_.spec_ and _.changes_ from the OBS package will be used, but this is not recommended
-if you want a real CD pipeline.
-3. Build process is not currently executed, so make sure the project builds
+   [OBS _service file](https://en.opensuse.org/openSUSE:Build_Service_Concept_SourceService) should be used. Otherwise current
+   _.spec_ and _.changes_ from the OBS package will be used, but this is not recommended if you want a real CD pipeline.
+3. In case the git repository owns a _.spec_ and the OBS package uses a *_service* file integration, the _.spec_ file will be copied
+   before the service update, applying the changes. The RPM version will still be calculated by the OBS service. 
+4. Build process is not currently executed, so make sure the project builds
 locally (this feature might be added in the future).
-4. Package version will be obtained from "Version: " in the _.spec_ file or calculated in case of the *_service* file is in use.
+5. Package version will be obtained from "Version: " in the _.spec_ file or calculated in case of the *_service* file is in use.
 
 ## How to use
 
