@@ -12,12 +12,13 @@ tool).
 In order to use this delivery process some conditions are required:
 
 1. OBS project and package must already exist. The process won't create a package.
-2. .spec and .changes file should be added to the git project. Otherwise current
-.spec and .changes from the OBS package will be used, but this is not recommended
+2. _.spec_ and _.changes_ file should be added to the git project or a 
+[OBS _service file](https://en.opensuse.org/openSUSE:Build_Service_Concept_SourceService) should be used. Otherwise current
+_.spec_ and _.changes_ from the OBS package will be used, but this is not recommended
 if you want a real CD pipeline.
 3. Build process is not currently executed, so make sure the project builds
 locally (this feature might be added in the future).
-4. Package version will be obtained from "Version: " in the .spec file.
+4. Package version will be obtained from "Version: " in the _.spec_ file or calculated in case of the *_service* file is in use.
 
 ## How to use
 
@@ -45,6 +46,7 @@ Here other optional parameters:
 export FOLDER=/package # used folder inside the docker container where our code is located
 export TARGET_PROJECT=target-project # target project to create a submit request. If not set submission will b skipped
 export TAR_NAME=my-tar # Custom tar name. Otherwise package name will be used
+export CHANGESAUTHOR=myemail@company.com # email of the changes author.
 ```
 
 3. Run the docker container
