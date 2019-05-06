@@ -6,7 +6,7 @@ TMP_FOLDER=/tmp
 DEST_FOLDER=/tmp/osc_project
 OSCRC_FILE=${OSCRC_FILE:=/root/.config/osc/oscrc}
 FOLDER=${FOLDER:=.}
-CHANGESAUTHOR=${CHANGESAUTHOR:="shap-staff@suse.de"}
+CHANGESAUTHOR=${CHANGESAUTHOR:=$(git -C $FOLDER log -1 --format='%ae')}
 
 # Mandatory parameters set using env varialbes
 # OBS_USER, OBS user
