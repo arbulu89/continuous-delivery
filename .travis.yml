@@ -1,7 +1,19 @@
 services:
   - docker
 
-script:
-  - docker build -t shap/continuous_deliver .
-  - docker login -u $DOCKER_USER --password $DOCKER_PASS
-  - docker push shap/continuous_deliver
+stages:
+  - test
+  - submit
+    
+jobs:
+  include:
+    - stage: test
+      script:
+        - docker build -t shap/continuous_deliver .
+        
+    - stage: submit    
+      if: type != pull_request AND branch = master
+      script:
+        - docker build -t shap/continuous_deliver .
+        - docker login -u $DOCKER_USER --password $DOCKER_PASS
+        - docker push shap/continuous_deliver
