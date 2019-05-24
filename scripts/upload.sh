@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 source $(dirname $0)/utils.sh
 
@@ -14,15 +14,6 @@ CHANGESAUTHOR=${CHANGESAUTHOR:=$(git -C $FOLDER log -1 --format='%ae')}
 # OBS_PROJECT, OBS project where the package is stored
 # PACKAGE_NAME, PACKAGE to submit in OBS project
 
-function check_params {
-  if [ -z $OBS_PROJECT -o -z $PACKAGE_NAME ]; then
-    echo "OBS_PROJECT or PACKAGE_NAME not set..."
-    return 1
-  else
-    return 0
-  fi
-}
-
 function update_obs_service {
 
   cd $DEST_FOLDER
@@ -31,7 +22,7 @@ function update_obs_service {
   osc rm ./*.tar.*
 
   echo "Updating the package using obs service..."
-  # Workaround because: 
+  # Workaround because:
   # https://github.com/openSUSE/obs-service-tar_scm/issues/296
   VC_MAILADDR="$CHANGESAUTHOR" osc service dr
 }
@@ -96,11 +87,11 @@ echo "Package name: $PACKAGE"
 if [ -e "$DEST_FOLDER/_service" ]; then
   echo "_service file identified. Updating via service..."
   # Copy the .spec file in case it is maintained on git.
-  # Don't copy the changes file as it could overwrite the 
+  # Don't copy the changes file as it could overwrite the
   # entry created by obs services.
   copy_spec_from_git
   update_obs_service
-else 
+else
   create_tarball
   copy_spec_from_git
   copy_changes_from_git
