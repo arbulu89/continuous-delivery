@@ -28,6 +28,8 @@ function update_obs_service {
 }
 
 function create_tarball {
+  # Remove old tarball
+  rm $DEST_FOLDER/*.tar.*
   # Create tar file and copy to obs folder
   TAR_NAME=${TAR_NAME:=$PACKAGE_NAME}
   echo "Creating tar file: $TAR_NAME..."
@@ -36,7 +38,7 @@ function create_tarball {
   cp -R $FOLDER/* $TMP_FOLDER/$TAR_NAME
   tar -zcvf $TMP_FOLDER/$TAR_NAME.tar.gz --exclude='.git' -C $TMP_FOLDER $TAR_NAME
   cp $TMP_FOLDER/$TAR_NAME.tar.gz $DEST_FOLDER
-  echo "tar file created: $TMP_FOLDER/$TAR_NAME.tar.gz"
+  echo "tar file created: $DEST_FOLDER/$TAR_NAME.tar.gz"
 }
 
 function copy_spec_from_git {
