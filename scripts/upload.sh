@@ -29,7 +29,7 @@ function update_obs_service {
 
 function create_tarball {
   # Remove old tarball
-  rm $DEST_FOLDER/*.tar.*
+  rm -f $DEST_FOLDER/*.tar.*
   # Create tar file and copy to obs folder
   TAR_NAME=${TAR_NAME:=$PACKAGE_NAME}
   echo "Creating tar file: $TAR_NAME..."
