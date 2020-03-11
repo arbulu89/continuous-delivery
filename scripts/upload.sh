@@ -43,9 +43,9 @@ function create_tarball {
 
 function copy_spec_from_git {
   # Copy .spec file from git project if exists
-  if [ -e $FOLDER/$PACKAGE_NAME.spec ]; then
+  if [ -e $FOLDER/$PACKAGE_NAME.spec?(\.in) ]; then
     echo "Spec file found"
-    cp $FOLDER/$PACKAGE_NAME.spec $DEST_FOLDER
+    cp $FOLDER/$PACKAGE_NAME.spec?(\.in) $DEST_FOLDER/$PACKAGE_NAME.spec
   fi
 }
 
@@ -75,11 +75,11 @@ OBS_PACKAGE=$OBS_PROJECT/$PACKAGE_NAME
 echo "Downloading $OBS_PACKAGE ..."
 osc checkout $OBS_PACKAGE -o $DEST_FOLDER
 
-if [ -e *.spec ]; then
-  VERSION=$(grep -Po '^Version:\s*\K(.*)' *.spec)
+if [ -e *.spec?(\.in) ]; then
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' *.spec?(\.in))
   echo "Version found in local spec file: $VERSION"
 else
-  VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/*.spec)
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/*.spec?(\.in))
   echo "Version found in obs project spec file: $VERSION"
 fi
 
