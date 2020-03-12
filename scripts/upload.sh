@@ -83,9 +83,6 @@ else
   echo "Version found in obs project spec file: $VERSION"
 fi
 
-PACKAGE=$PACKAGE_NAME-$VERSION
-echo "Package name: $PACKAGE"
-
 if [ -e "$DEST_FOLDER/_service" ]; then
   echo "_service file identified. Updating via service..."
   # Copy the .spec file in case it is maintained on git.
@@ -98,6 +95,9 @@ else
   copy_spec_from_git
   copy_changes_from_git
 fi
+
+PACKAGE=$PACKAGE_NAME-$VERSION
+echo "Package name: $PACKAGE"
 
 # Update project
 cd $DEST_FOLDER
