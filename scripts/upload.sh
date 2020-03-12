@@ -7,6 +7,7 @@ DEST_FOLDER=/tmp/osc_project
 OSCRC_FILE=${OSCRC_FILE:=/root/.config/osc/oscrc}
 FOLDER=${FOLDER:=.}
 CHANGESAUTHOR=${CHANGESAUTHOR:=$(git -C $FOLDER log -1 --format='%ae')}
+SPEC_FILE=$(find $FOLDER -name "$PACKAGE_NAME.spec" -o -name "$PACKAGE_NAME.spec.in")
 
 # Mandatory parameters set using env varialbes
 # OBS_USER, OBS user
@@ -43,9 +44,9 @@ function create_tarball {
 
 function copy_spec_from_git {
   # Copy .spec file from git project if exists
-  if [[ $(find $FOLDER -name "$PACKAGE_NAME.spec" -o -name "$PACKAGE_NAME.spec.in") ]]; then
+  if [ -e $SPEC_FILE ]; then
     echo "Spec file found"
-    cp $(find $FOLDER -name "$PACKAGE_NAME.spec" -o -name "$PACKAGE_NAME.spec.in") $DEST_FOLDER/$PACKAGE_NAME.spec
+    cp $SPEC_FILE $DEST_FOLDER/$PACKAGE_NAME.spec
   fi
 }
 
@@ -75,11 +76,11 @@ OBS_PACKAGE=$OBS_PROJECT/$PACKAGE_NAME
 echo "Downloading $OBS_PACKAGE ..."
 osc checkout $OBS_PACKAGE -o $DEST_FOLDER
 
-if [ -e *.spec?(\.in) ]; then
-  VERSION=$(grep -Po '^Version:\s*\K(.*)' *.spec?(\.in))
+if [ -e $SPEC_FILE ]; then
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' $SPEC_FILE)
   echo "Version found in local spec file: $VERSION"
 else
-  VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/*.spec?(\.in))
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/$SPEC_FILE)
   echo "Version found in obs project spec file: $VERSION"
 fi
 
