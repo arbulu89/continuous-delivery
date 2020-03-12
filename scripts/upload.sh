@@ -7,7 +7,10 @@ DEST_FOLDER=/tmp/osc_project
 OSCRC_FILE=${OSCRC_FILE:=/root/.config/osc/oscrc}
 FOLDER=${FOLDER:=.}
 CHANGESAUTHOR=${CHANGESAUTHOR:=$(git -C $FOLDER log -1 --format='%ae')}
+
+# Get spec file
 SPEC_FILE=$(find $FOLDER -name "$PACKAGE_NAME.spec" -o -name "$PACKAGE_NAME.spec.in")
+SPEC_FILE=${SPEC_FILE:='not found'}
 
 # Mandatory parameters set using env varialbes
 # OBS_USER, OBS user
@@ -80,7 +83,7 @@ if [ -e $SPEC_FILE ]; then
   VERSION=$(grep -Po '^Version:\s*\K(.*)' $SPEC_FILE)
   echo "Version found in local spec file: $VERSION"
 else
-  VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/$SPEC_FILE)
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/$PACKAGE_NAME.spec)
   echo "Version found in obs project spec file: $VERSION"
 fi
 
@@ -91,6 +94,8 @@ if [ -e "$DEST_FOLDER/_service" ]; then
   # entry created by obs services.
   copy_spec_from_git
   update_obs_service
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' $PACKAGE_NAME.spec)
+  echo "Version updated after _service execution: $VERSION"
 else
   create_tarball
   copy_spec_from_git
