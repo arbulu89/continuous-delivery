@@ -8,6 +8,10 @@ OSCRC_FILE=${OSCRC_FILE:=/root/.config/osc/oscrc}
 FOLDER=${FOLDER:=.}
 CHANGESAUTHOR=${CHANGESAUTHOR:=$(git -C $FOLDER log -1 --format='%ae')}
 
+# Get spec file
+SPEC_FILE=$(find $FOLDER -name "$PACKAGE_NAME.spec" -o -name "$PACKAGE_NAME.spec.in")
+SPEC_FILE=${SPEC_FILE:='not found'}
+
 # Mandatory parameters set using env varialbes
 # OBS_USER, OBS user
 # OBS_PASS, OBS user password
@@ -43,9 +47,9 @@ function create_tarball {
 
 function copy_spec_from_git {
   # Copy .spec file from git project if exists
-  if [ -e $FOLDER/$PACKAGE_NAME.spec ]; then
+  if [ -e $SPEC_FILE ]; then
     echo "Spec file found"
-    cp $FOLDER/$PACKAGE_NAME.spec $DEST_FOLDER
+    cp $SPEC_FILE $DEST_FOLDER/$PACKAGE_NAME.spec
   fi
 }
 
@@ -75,16 +79,13 @@ OBS_PACKAGE=$OBS_PROJECT/$PACKAGE_NAME
 echo "Downloading $OBS_PACKAGE ..."
 osc checkout $OBS_PACKAGE -o $DEST_FOLDER
 
-if [ -e *.spec ]; then
-  VERSION=$(grep -Po '^Version:\s*\K(.*)' *.spec)
+if [ -e $SPEC_FILE ]; then
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' $SPEC_FILE)
   echo "Version found in local spec file: $VERSION"
 else
-  VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/*.spec)
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' $DEST_FOLDER/$PACKAGE_NAME.spec)
   echo "Version found in obs project spec file: $VERSION"
 fi
-
-PACKAGE=$PACKAGE_NAME-$VERSION
-echo "Package name: $PACKAGE"
 
 if [ -e "$DEST_FOLDER/_service" ]; then
   echo "_service file identified. Updating via service..."
@@ -93,11 +94,16 @@ if [ -e "$DEST_FOLDER/_service" ]; then
   # entry created by obs services.
   copy_spec_from_git
   update_obs_service
+  VERSION=$(grep -Po '^Version:\s*\K(.*)' $PACKAGE_NAME.spec)
+  echo "Version updated after _service execution: $VERSION"
 else
   create_tarball
   copy_spec_from_git
   copy_changes_from_git
 fi
+
+PACKAGE=$PACKAGE_NAME-$VERSION
+echo "Package name: $PACKAGE"
 
 # Update project
 cd $DEST_FOLDER
