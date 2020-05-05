@@ -61,6 +61,22 @@ function copy_changes_from_git {
   fi
 }
 
+function copy_service_from_git {
+  # Copy _service file from git project if exists
+  if [ -e _service ]; then
+    echo "_service file found"
+    cp $FOLDER/_service $DEST_FOLDER
+  fi
+}
+
+function copy_servicedata_from_git {
+  # Copy _servicedata file from git project if exists
+  if [ -e _servicedata ]; then
+    echo "_servicedata file found"
+    cp $FOLDER/_servicedata $DEST_FOLDER
+  fi
+}
+
 check_user
 if [ $? -ne 0 ]; then
   rm $OSCRC_FILE
@@ -93,6 +109,8 @@ if [ -e "$DEST_FOLDER/_service" ]; then
   # Don't copy the changes file as it could overwrite the
   # entry created by obs services.
   copy_spec_from_git
+  copy_service_from_git
+  copy_servicedata_from_git
   update_obs_service
   VERSION=$(grep -Po '^Version:\s*\K(.*)' $PACKAGE_NAME.spec)
   echo "Version updated after _service execution: $VERSION"
