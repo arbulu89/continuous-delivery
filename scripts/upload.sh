@@ -109,6 +109,7 @@ if [ -e "$DEST_FOLDER/_service" ]; then
   # Don't copy the changes file as it could overwrite the
   # entry created by obs services.
   copy_spec_from_git
+  copy_changes_from_git
   copy_service_from_git
   copy_servicedata_from_git
   update_obs_service
