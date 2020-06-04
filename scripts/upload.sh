@@ -103,7 +103,7 @@ else
   echo "Version found in obs project spec file: $VERSION"
 fi
 
-if [ -e "$DEST_FOLDER/_service" ]; then
+if [ -e "$DEST_FOLDER/_service" ] || [ -e "$FOLDER/_service" ]; then
   echo "_service file identified. Updating via service..."
   # Copy the .spec file in case it is maintained on git.
   # Don't copy the changes file as it could overwrite the
