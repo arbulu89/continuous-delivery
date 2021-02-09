@@ -74,7 +74,7 @@ changelog_changed
 if [ $? -ne 0 ]; then
   echo "Changelog not updated. Skipping submit request"
   rm $OSCRC_FILE
-  exit 1
+  exit 0
 fi
 
 echo "Creating submit request to $TARGET_PROJECT from $OBS_PROJECT/$PACKAGE_NAME"
