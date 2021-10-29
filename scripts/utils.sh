@@ -6,8 +6,14 @@ function check_user {
     return 1
   else
     sed -i "s/# user =/user = $OBS_USER/g" $OSCRC_FILE
-    sed -i "s/# pass =/pass = $OBS_PASS/g" $OSCRC_FILE
+    sed -i "s/# pass =/pass = $OBS_PASS/g" $OSCRC_FILE    
+  fi
+
+  # Check if the OSC_API_URL is set
+  if [ -z $OSC_API_URL ]; then    
     return 0
+  else
+    sed -i "s|https://api.opensuse.org|$OSC_API_URL|g" $OSCRC_FILE
   fi
 }
 
