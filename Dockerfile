@@ -5,7 +5,7 @@ MAINTAINER Xabier Arbulu Insausti
 # install
 RUN zypper -n ar https://download.opensuse.org/repositories/openSUSE:/Tools/openSUSE_15.3/openSUSE:Tools.repo
 RUN zypper -n ar https://download.opensuse.org/repositories/devel:/languages:/go/openSUSE_Leap_15.3/devel:languages:go.repo
-RUN zypper -n ar https://download.opensuse.org/repositories/OBS:/Server:/Unstable/SLE_15_SP3/OBS:Server:Unstable.repo
+RUN zypper -n ar https://download.opensuse.org/repositories/OBS:/Server:/Unstable/15.3/OBS:Server:Unstable.repo
 RUN zypper -n --gpg-auto-import-keys refresh --force --services
 RUN zypper in -y sudo osc tar gzip build vim python3-packaging golang-packaging
 RUN zypper in -y obs-service-obs_scm \
