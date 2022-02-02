@@ -29,6 +29,11 @@ function update_obs_service {
   # Workaround because:
   # https://github.com/openSUSE/obs-service-tar_scm/issues/296
   VC_MAILADDR="$CHANGESAUTHOR" osc service dr
+
+  # This looks like node_modules obs service bug, as it puts older node modules in the root folder
+  # even though the good ones are compressed in the obscpio file
+  echo "Removing currently extracted old tgz files..."
+  rm -f ./*.tgz
 }
 
 function create_tarball {
