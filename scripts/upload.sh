@@ -23,7 +23,7 @@ function update_obs_service {
   cd $DEST_FOLDER
 
   echo "Removing old tarball: $tarball ..."
-  osc rm -f ./*.tar.* | true
+  osc rm -f "./*.tar.*" | true
 
   echo "Updating the package using obs service..."
   # Workaround because:
