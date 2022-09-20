@@ -7,7 +7,7 @@ ENV LC_ALL C.UTF-8
 
 # install
 RUN zypper -n ar https://download.opensuse.org/repositories/openSUSE:/Tools/openSUSE_15.3/openSUSE:Tools.repo && \
-    zypper -n ar https://download.opensuse.org/repositories/devel:/languages:/go/openSUSE_Leap_15.3/devel:languages:go.repo && \
+    zypper -n ar https://download.opensuse.org/repositories/devel:/languages:/go/15.3/devel:languages:go.repo && \
     zypper -n ar https://download.opensuse.org/repositories/OBS:/Server:/Unstable/15.3/OBS:Server:Unstable.repo && \
     zypper -n ar https://download.opensuse.org/repositories/devel:/languages:/erlang/openSUSE_Leap_15.3/devel:languages:erlang.repo && \
     zypper -n --gpg-auto-import-keys refresh --force --services && \
